@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWindowsForms>true</UseWindowsForms>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="bin\Debug\net9.0-windows\sounds\note1.wav" />
+      <None Include="bin\Debug\net9.0-windows\sounds\note2.wav" />
+      <None Include="bin\Debug\net9.0-windows\sounds\note3.wav" />
+      <None Include="bin\Debug\net9.0-windows\sounds\note4.wav" />
+      <None Include="bin\Debug\net9.0-windows\sounds\note5.wav" />
+      <None Include="bin\Debug\net9.0-windows\sounds\note6.wav" />
+      <None Include="bin\Debug\net9.0-windows\sounds\note7.wav" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NAudio" Version="2.2.1" />
+    </ItemGroup>
+
+</Project>
