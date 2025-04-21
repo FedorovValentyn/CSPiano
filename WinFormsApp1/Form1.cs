@@ -29,75 +29,129 @@ namespace VirtualPiano
             LogEvent("Program started.");
         }
 
-        private void InitializePianoUI()
+       private void InitializePianoUI()
+{
+    this.Text = "Virtual Piano";
+    this.Width = 1300;
+    this.Height = 900;
+    this.KeyPreview = true;
+    this.BackColor = Color.Black;
+    this.StartPosition = FormStartPosition.CenterScreen;
+
+    Panel pianoPanel = new Panel
+    {
+        Location = new Point(100, 50),
+        Size = new Size(7 * 120, 400),
+        BackColor = Color.Black
+    };
+    this.Controls.Add(pianoPanel);
+
+    // Додаємо білі клавіші
+    for (int i = 0; i < 7; i++)
+    {
+        Button keyButton = new Button
         {
-            this.Text = "Virtual Piano";
-            this.Width = 1920;
-            this.Height = 1080;
-            this.KeyPreview = true;
-            this.BackColor = Color.Black;
-            this.StartPosition = FormStartPosition.CenterScreen;
+            Name = $"key{i + 1}",
+            Width = 100,
+            Height = 350,
+            Location = new Point(i * 120, 20),
+            BackColor = Color.White,
+            FlatStyle = FlatStyle.Flat,
+            Font = new Font("Consolas", 14F, FontStyle.Bold),
+            Tag = i + 1,
+            Text = ""
+        };
+        keyButton.FlatAppearance.BorderColor = Color.Black;
+        keyButton.FlatAppearance.BorderSize = 3;
+        keyButton.Click += KeyButton_Click;
+        pianoPanel.Controls.Add(keyButton);
+    }
 
-            Panel pianoPanel = new Panel
-            {
-                Location = new Point(100, 150),
-                Size = new Size(7 * 180, 500), // 7 клавіш по 180 шириною
-                BackColor = Color.Black
-            };
-            this.Controls.Add(pianoPanel);
 
-            for (int i = 0; i < 7; i++)
-            {
-                Button keyButton = new Button
-                {
-                    Name = $"key{i + 1}",
-                    Width = 170,
-                    Height = 480,
-                    Location = new Point(i * 180, 10),
-                    BackColor = Color.White,
-                    FlatStyle = FlatStyle.Flat,
-                    Font = new Font("Arial", 20, FontStyle.Bold),
-                    Tag = i + 1,
-                    Text = ""
-                };
-                keyButton.FlatAppearance.BorderColor = Color.Black;
-                keyButton.FlatAppearance.BorderSize = 3;
-                keyButton.Click += KeyButton_Click;
-                pianoPanel.Controls.Add(keyButton);
-            }
+    int[] blackKeyOffsets = { 1, 2, 4, 5, 6 }; // між якими білими стоять чорні
+    foreach (int i in blackKeyOffsets)
+    {
+        Button blackKey = new Button
+        {
+            Width = 70,
+            Height = 220,
+            Location = new Point((i * 120) - 45, 0), // -45 центрує між білими, 0 — вище
+            BackColor = Color.Black,
+            FlatStyle = FlatStyle.Flat,
+            Tag = $"b{i}",
+            Text = "",
+            Parent = pianoPanel
+        };
+        blackKey.FlatAppearance.BorderColor = Color.Black;
+        blackKey.FlatAppearance.BorderSize = 1;
 
-            Label titleLabel = new Label
-            {
-                Text = "PIANO",
-                Font = new Font("Consolas", 72F, FontStyle.Bold),
-                ForeColor = Color.White,
-                Location = new Point(100, 20),
-                AutoSize = true
-            };
-            this.Controls.Add(titleLabel);
+        blackKey.Click += (s, e) =>
+        {
+            MessageBox.Show($"Black key {blackKey.Tag} pressed (sound not assigned).");
+        };
 
-            Label instructionsLabel = new Label
-            {
-                Text = "Notes are played by pressing keys: 1 , 2 , 3 , 4 , 5 , 6 , 7",
-                Font = new Font("Consolas", 24F, FontStyle.Regular),
-                ForeColor = Color.White,
-                Location = new Point(100, 700),
-                AutoSize = true
-            };
-            this.Controls.Add(instructionsLabel);
+        pianoPanel.Controls.Add(blackKey);
+        blackKey.BringToFront(); // щоб вони були поверх білих
+    }
 
-            Label exitLabel = new Label
-            {
-                Text = "To exit, press \"b\"",
-                Font = new Font("Consolas", 24F, FontStyle.Regular),
-                ForeColor = Color.Yellow,
-                Location = new Point(100, 750),
-                AutoSize = true
-            };
-            this.Controls.Add(exitLabel);
 
-            this.KeyDown += PianoForm_KeyDown;
-        }
+    // ASCII-style заголовок "PIANO"
+    Label asciiLabel = new Label
+    {
+        Font = new Font("Consolas", 14F, FontStyle.Bold),
+        ForeColor = Color.White,
+        BackColor = Color.Black,
+        Location = new Point(100, 500),
+        AutoSize = true,
+        Text = @"
+ ____ ___     _    _   _  _ __
+ |  _ \_ _|  / \  | \ | |  _  |
+ | |_) | |  / _ \ |  \| | | | |
+ |  __/| | / ___ \| |\  | |_| |
+ |_|  |___|_/   \_\_| \_| ___ |"
+    };
+    this.Controls.Add(asciiLabel);
+
+    // Goodbye
+    Label goodbyeLabel = new Label
+    {
+        Text = "Goodbye !",
+        Font = new Font("Consolas", 24F, FontStyle.Regular),
+        ForeColor = Color.Magenta,
+        BackColor = Color.Black,
+        Location = new Point(120, 580),
+        AutoSize = true
+    };
+    this.Controls.Add(goodbyeLabel);
+
+    // Інструкції
+    Label instructionsLabel = new Label
+    {
+        Text = "Notes are played by pressing keys:\n1 , 2 , 3 , 4 , 5 , 6 , 7",
+        Font = new Font("Consolas", 20F),
+        ForeColor = Color.White,
+        BackColor = Color.Black,
+        Location = new Point(800, 500),
+        AutoSize = true
+    };
+    this.Controls.Add(instructionsLabel);
+
+    // Вихід
+    Label exitLabel = new Label
+    {
+        Text = "To exit, press \"b\"",
+        Font = new Font("Consolas", 20F),
+        ForeColor = Color.Yellow,
+        BackColor = Color.Black,
+        Location = new Point(800, 600),
+        AutoSize = true
+    };
+    this.Controls.Add(exitLabel);
+
+    this.KeyDown += PianoForm_KeyDown;
+}
+
+
 
         private void InitializeLogger()
         {
