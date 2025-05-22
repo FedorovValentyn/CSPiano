@@ -177,7 +177,7 @@ namespace VirtualPiano
 
         private void PianoForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.B)
+             if (e.Control && e.KeyCode == Keys.F)
             {
                 LogEvent("Program exited by user.");
                 Application.Exit();
