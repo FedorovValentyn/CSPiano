@@ -176,32 +176,40 @@ namespace VirtualPiano
         }
 
         private void PianoForm_KeyDown(object sender, KeyEventArgs e)
-        {
-             if (e.Control && e.KeyCode == Keys.F)
-            {
-                LogEvent("Program exited by user.");
-                Application.Exit();
-            }
-            else
-            {
-                int noteNumber = e.KeyValue - (int)'0';
-                if (noteNumber >= 1 && noteNumber <= 7)
-                {
-                    PlayNote(noteNumber);
-                    var btn = FindButtonByTag(noteNumber);
-                    if (btn != null)
-                        HighlightKey(btn, noteNumber);
+{
+    // Вихід із програми по Ctrl + F
+    if (e.Control && e.KeyCode == Keys.F)
+    {
+        LogEvent("Program exited by user.");
+        Application.Exit();
+        return;
+    }
 
-                    LogEvent($"Note {noteNumber} played by keyboard.");
-                }
-                else
-                {
-                    MessageBox.Show("Invalid input! Please press a number between 1 and 7.", "Input Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LogEvent($"Invalid input: {e.KeyCode}");
-                }
-            }
-        }
+    // Якщо натиснута тільки Ctrl або інша службова клавіша — ігноруємо
+    if (e.KeyCode < Keys.D0 || e.KeyCode > Keys.D9)
+        return;
+
+    // Обчислення номеру ноти
+    int noteNumber = e.KeyValue - (int)'0';
+
+    // Якщо це цифра від 1 до 7 — граємо ноту
+    if (noteNumber >= 1 && noteNumber <= 7)
+    {
+        PlayNote(noteNumber);
+        var btn = FindButtonByTag(noteNumber);
+        if (btn != null)
+            HighlightKey(btn, noteNumber);
+
+        LogEvent($"Note {noteNumber} played by keyboard.");
+    }
+    else
+    {
+        MessageBox.Show("Invalid input! Please press a number between 1 and 7.", "Input Error",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+        LogEvent($"Invalid input: {e.KeyCode}");
+    }
+}
+
 
         private Button FindButtonByTag(int noteNumber)
         {
